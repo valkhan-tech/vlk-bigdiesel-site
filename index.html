@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BigDiesel – A Sua Oficina de Confiança</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #080808;
+    --bg2:       #111111;
+    --bg3:       #1a1a1a;
+    --red:       #CC0000;
+    --red-hot:   #FF2200;
+    --silver:    #A0A0A0;
+    --silver-hi: #D0D0D0;
+    --white:     #F5F5F5;
+    --text:      #CCCCCC;
+    --border:    rgba(200,0,0,0.18);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 6vw;
+    height: 72px;
+    background: rgba(8,8,8,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--silver); font-size: .85rem; font-weight: 500;
+    text-decoration: none; letter-spacing: .08em; text-transform: uppercase;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--red);
+    color: #fff !important;
+    padding: .45rem 1.2rem;
+    border-radius: 2px;
+    transition: background .2s !important;
+  }
+  .nav-cta:hover { background: var(--red-hot) !important; color: #fff !important; }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 0 6vw; overflow: hidden;
+    background:
+      linear-gradient(105deg, rgba(4,4,4,0.90) 0%, rgba(8,8,8,0.65) 55%, rgba(10,3,3,0.82) 100%),
+      url('cover.jpg') center/cover no-repeat;
+  }
+
+  /* canvas particles */
+  #hero-canvas {
+    position: absolute; inset: 0; pointer-events: none; opacity: .45;
+  }
+
+  /* diagonal red slash */
+  .hero-slash {
+    position: absolute; top: 0; right: 0;
+    width: 55vw; height: 100%;
+    background: linear-gradient(135deg, transparent 0%, transparent 38%, rgba(180,0,0,0.08) 38%, rgba(180,0,0,0.06) 100%);
+    clip-path: polygon(38% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+
+  /* injector line animation */
+  .hero-line {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    opacity: 0;
+    animation: inject-line 3s ease-out 0.8s forwards;
+  }
+  @keyframes inject-line {
+    0%   { opacity: 0; transform: scaleX(0) translateY(-50%); transform-origin: left; }
+    30%  { opacity: 1; transform: scaleX(1) translateY(-50%); transform-origin: left; }
+    70%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 720px; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-size: .72rem; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 1.4rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 28px; height: 2px; background: var(--red);
+  }
+
+  h1.hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.6rem, 5vw, 4.8rem);
+    line-height: .95;
+    letter-spacing: .02em;
+    color: var(--white);
+    margin-bottom: 1.6rem;
+  }
+  h1.hero-title span { color: var(--red); }
+
+  .hero-sub {
+    font-size: clamp(.95rem, 1.6vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--silver);
+    max-width: 500px;
+    margin-bottom: 2.4rem;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: var(--red); color: #fff;
+    padding: .85rem 2rem; border-radius: 2px;
+    font-weight: 600; font-size: .92rem; letter-spacing: .06em;
+    text-decoration: none; text-transform: uppercase;
+    transition: background .2s, transform .15s;
+  }
+  .btn-primary:hover { background: var(--red-hot); transform: translateY(-2px); }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: .6rem;
+    border: 1px solid var(--silver);
+    color: var(--silver); padding: .85rem 2rem; border-radius: 2px;
+    font-weight: 500; font-size: .92rem; letter-spacing: .06em;
+    text-decoration: none; text-transform: uppercase;
+    transition: border-color .2s, color .2s, transform .15s;
+  }
+  .btn-outline:hover { border-color: var(--white); color: var(--white); transform: translateY(-2px); }
+
+  /* stats strip */
+  .hero-stats {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 0;
+    background: rgba(17,17,17,0.9);
+    border-top: 1px solid var(--border);
+    z-index: 2;
+  }
+  .stat-item {
+    flex: 1; max-width: 220px;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.6rem 1rem;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem; line-height: 1;
+    color: var(--red); letter-spacing: .04em;
+  }
+  .stat-label {
+    font-size: .72rem; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--silver); margin-top: .3rem;
+  }
+
+  /* ─── SECTION SHARED ─── */
+  section { padding: 6rem 6vw; }
+
+  .section-eyebrow {
+    font-size: .72rem; font-weight: 600; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--red);
+    display: flex; align-items: center; gap: .6rem;
+    margin-bottom: 1rem;
+  }
+  .section-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--red); }
+
+  h2.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    letter-spacing: .03em; line-height: 1;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  h2.section-title span { color: var(--red); }
+
+  .section-desc {
+    font-size: 1rem; line-height: 1.75;
+    color: var(--silver); max-width: 560px; margin-bottom: 3rem;
+  }
+
+  /* ─── ABOUT / DIFERENCIAL ─── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .about-visual {
+    position: relative;
+    height: 420px;
+  }
+  .about-img-frame {
+    width: 100%; height: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    border-radius: 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+    transform: perspective(1000px) rotateY(-10deg) rotateX(3deg);
+    box-shadow: -6px 18px 48px rgba(0,0,0,0.65), 6px 4px 24px rgba(200,0,0,0.07);
+    transition: transform .5s ease, box-shadow .5s ease;
+  }
+  .about-visual:hover .about-img-frame {
+    transform: perspective(1000px) rotateY(-5deg) rotateX(1.5deg);
+    box-shadow: -4px 14px 40px rgba(0,0,0,0.55), 4px 4px 18px rgba(200,0,0,0.06);
+  }
+  .about-visual { overflow: visible; }
+
+  /* big background text */
+  .about-bg-text {
+    position: absolute; bottom: -1.5rem; right: -1rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem; color: rgba(200,0,0,0.06);
+    letter-spacing: .04em; user-select: none; pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .diferenciais-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--border); margin-top: 2rem;
+  }
+  .dif-card {
+    background: var(--bg2);
+    padding: 1.6rem;
+    transition: background .25s;
+  }
+  .dif-card:hover { background: var(--bg3); }
+  .dif-icon {
+    width: 40px; height: 40px;
+    background: rgba(200,0,0,0.12);
+    border: 1px solid rgba(200,0,0,0.3);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  .dif-card h4 {
+    font-size: .9rem; font-weight: 600;
+    color: var(--white); margin-bottom: .4rem;
+  }
+  .dif-card p {
+    font-size: .82rem; color: var(--silver); line-height: 1.6;
+  }
+
+  /* ─── SERVICES ─── */
+  #services { background: var(--bg); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+  }
+  .service-card {
+    background: var(--bg2);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background .25s;
+    cursor: default;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
+  }
+  .service-card:hover { background: var(--bg3); }
+  .service-card:hover::after { transform: scaleX(1); }
+
+  .service-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; color: rgba(200,0,0,0.28);
+    line-height: 1; position: absolute; top: 1rem; right: 1.2rem;
+    user-select: none;
+  }
+  .service-card h3 {
+    font-size: 1rem; font-weight: 600; color: var(--white);
+    margin-bottom: .6rem; position: relative; z-index: 1;
+  }
+  .service-card p {
+    font-size: .83rem; line-height: 1.65; color: var(--silver);
+    position: relative; z-index: 1;
+  }
+
+  /* ─── SPECIALTY PRODUCTS ─── */
+  #specialty { background: var(--bg2); border-top: 1px solid var(--border); }
+
+  .specialty-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: end; margin-bottom: 4rem;
+  }
+
+  .product-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 1px;
+  }
+  .product-block:nth-child(odd) .product-image { order: -1; }
+
+  .product-image {
+    aspect-ratio: 4/3;
+    background: var(--bg3);
+    overflow: hidden;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .product-image-inner {
+    width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+    transition: transform .5s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .product-block:hover .product-image-inner { transform: scale(1.04); }
+
+  .product-content {
+    background: var(--bg);
+    padding: 3rem 2.5rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .product-tag {
+    font-size: .68rem; font-weight: 700; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 1rem;
+  }
+  .product-content h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem; letter-spacing: .04em;
+    color: var(--white); margin-bottom: 1rem; line-height: 1;
+  }
+  .product-content p {
+    font-size: .9rem; line-height: 1.75;
+    color: var(--silver); margin-bottom: 1.6rem;
+  }
+  .product-features {
+    list-style: none; display: flex; flex-direction: column; gap: .5rem;
+    margin-bottom: 2rem;
+  }
+  .product-features li {
+    font-size: .82rem; color: var(--silver);
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .product-features li::before {
+    content: ''; width: 14px; height: 1px; background: var(--red);
+    flex-shrink: 0;
+  }
+
+  /* product hero bg illustrations */
+  .prod-bg-eps { background: linear-gradient(135deg, #1a0a0a 0%, #0d0d0d 100%); }
+  .prod-bg-motor { background: linear-gradient(135deg, #0a0a1a 0%, #0d0d0d 100%); }
+  .prod-bg-caixa { background: linear-gradient(135deg, #0a1a0a 0%, #0d0d0d 100%); }
+
+  .prod-icon-wrap {
+    width: 120px; height: 120px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+    background: rgba(200,0,0,0.06);
+    position: relative;
+  }
+  .prod-icon-wrap::before {
+    content: '';
+    position: absolute; inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,0,0,0.12);
+    animation: pulse-ring 2.5s linear infinite;
+  }
+  @keyframes pulse-ring {
+    0%   { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.35); }
+  }
+
+  /* ─── GALLERY ─── */
+  #gallery { background: var(--bg); }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 260px 260px;
+    gap: 4px;
+  }
+  .gallery-item {
+    background: var(--bg3);
+    overflow: hidden;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gallery-item:nth-child(1) { grid-column: span 5; }
+  .gallery-item:nth-child(2) { grid-column: span 4; }
+  .gallery-item:nth-child(3) { grid-column: span 3; }
+  .gallery-item:nth-child(4) { grid-column: span 3; }
+  .gallery-item:nth-child(5) { grid-column: span 5; }
+  .gallery-item:nth-child(6) { grid-column: span 4; }
+
+  .gallery-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(200,0,0,0.35), transparent 50%);
+    opacity: 0;
+    transition: opacity .35s;
+  }
+  .gallery-item:hover::after { opacity: 1; }
+
+  .gallery-icon {
+    font-size: 2.5rem; opacity: .15;
+  }
+
+  /* ─── CONTACT / CTA ─── */
+  #contact {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    align-items: start;
+  }
+
+  .contact-info h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: .03em; line-height: 1; margin-bottom: 1.4rem;
+  }
+  .contact-info h2 span { color: var(--red); }
+  .contact-info p {
+    font-size: .95rem; line-height: 1.75; color: var(--silver);
+    margin-bottom: 2rem;
+  }
+
+  .contact-details { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-row {
+    display: flex; align-items: flex-start; gap: 1rem;
+    font-size: .9rem; color: var(--silver);
+  }
+  .contact-row-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: rgba(200,0,0,0.1);
+    border: 1px solid rgba(200,0,0,0.25);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .9rem; color: var(--red);
+    margin-top: .05rem;
+  }
+  .contact-row strong { color: var(--white); display: block; margin-bottom: .1rem; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+
+  .whatsapp-cta {
+    background: #25D366;
+    display: flex; align-items: center; gap: .8rem;
+    padding: 1rem 1.6rem; border-radius: 2px;
+    color: #fff; font-weight: 700; font-size: 1rem;
+    text-decoration: none;
+    transition: filter .2s, transform .15s;
+    margin-top: 2rem; align-self: flex-start;
+    width: fit-content;
+  }
+  .whatsapp-cta:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+  .contact-map {
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    height: 340px;
+    overflow: hidden;
+    position: relative;
+  }
+  .contact-map iframe {
+    width: 100%; height: 100%;
+    display: block; border: 0;
+    filter: grayscale(1) invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 2rem 6vw;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; letter-spacing: .08em; color: var(--silver);
+  }
+  .footer-logo span { color: var(--red); }
+  footer p { font-size: .78rem; color: rgba(160,160,160,0.5); }
+
+  /* ─── REVEAL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* stagger */
+  .reveal-d1 { transition-delay: .1s; }
+  .reveal-d2 { transition-delay: .2s; }
+  .reveal-d3 { transition-delay: .3s; }
+  .reveal-d4 { transition-delay: .4s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 0 4vw; }
+    .nav-links { display: none; }
+    section { padding: 4rem 5vw; }
+    #about { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-visual { height: 260px; }
+    .specialty-intro { grid-template-columns: 1fr; gap: 1.5rem; }
+    .product-block { grid-template-columns: 1fr; }
+    .product-block:nth-child(odd) .product-image { order: 0; }
+    .product-image { aspect-ratio: 16/7; }
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .gallery-item { grid-column: span 1 !important; height: 180px; }
+    #contact { grid-template-columns: 1fr; }
+    .diferenciais-grid { grid-template-columns: 1fr; }
+    .hero-stats { flex-wrap: wrap; }
+    .stat-item { min-width: 50%; border-bottom: 1px solid var(--border); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: 0s !important; }
+  }
+
+  /* ─── METALLIC SHIMMER ─── */
+  @keyframes metal-sweep {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+
+  @keyframes luminary-sweep {
+    0%   { transform: translateX(-40%) skewX(-12deg); opacity: 0; }
+    6%   { opacity: 1; }
+    86%  { opacity: 0.7; }
+    100% { transform: translateX(210%) skewX(-12deg); opacity: 0; }
+  }
+
+  /* Nav animated metallic bottom edge */
+  nav::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(110,118,132,0.2) 15%,
+      rgba(185,195,215,0.65) 38%,
+      rgba(225,232,245,0.95) 50%,
+      rgba(185,195,215,0.65) 62%,
+      rgba(110,118,132,0.2) 85%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: metal-sweep 8s linear infinite;
+  }
+
+  /* Metallic shimmer on eyebrow accent lines */
+  .section-eyebrow::before,
+  .hero-eyebrow::before {
+    background: linear-gradient(90deg, #CC0000 0%, #FF8888 35%, #FFE4E4 50%, #FF8888 65%, #CC0000 100%);
+    background-size: 200% 100%;
+    animation: metal-sweep 4s linear infinite;
+  }
+
+  /* Metallic animated top edge on hero stats bar */
+  .hero-stats { position: relative; border-top: none; }
+  .hero-stats::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(140,150,165,0.35) 18%,
+      rgba(200,215,235,0.82) 50%,
+      rgba(140,150,165,0.35) 82%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: metal-sweep 9s linear infinite;
+  }
+
+  /* Stat numbers metallic red gradient */
+  .stat-num {
+    background: linear-gradient(125deg, #AA0000 0%, #EE3333 30%, #FFCCCC 50%, #EE3333 70%, #AA0000 100%);
+    background-size: 250% 250%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: metal-sweep 3.5s ease-in-out infinite;
+  }
+
+  /* Product blocks metallic top border sweep */
+  .product-block { position: relative; }
+  .product-block::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px; z-index: 2;
+    background: linear-gradient(90deg,
+      transparent,
+      rgba(155,165,182,0.45) 25%,
+      rgba(210,222,240,0.82) 50%,
+      rgba(155,165,182,0.45) 75%,
+      transparent
+    );
+    background-size: 200% 100%;
+    animation: metal-sweep 6s linear infinite;
+  }
+
+  /* Dif-icon metallic glow on hover */
+  .dif-card:hover .dif-icon {
+    box-shadow: 0 0 0 1px rgba(188,200,218,0.35), 0 0 14px rgba(200,0,0,0.12);
+    border-color: rgba(200,210,225,0.35);
+  }
+
+  /* Service card subtle metallic inset on hover */
+  .service-card:hover {
+    box-shadow: inset 1px 0 0 rgba(175,188,208,0.18);
+  }
+
+  /* Hero luminary light sweep */
+  .hero-luminary {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+  }
+  .hero-luminary::after {
+    content: '';
+    position: absolute;
+    top: -30%; left: -50%;
+    width: 55%; height: 160%;
+    background: linear-gradient(
+      105deg,
+      transparent 38%,
+      rgba(255,255,255,0.010) 44%,
+      rgba(255,248,235,0.035) 50%,
+      rgba(255,255,255,0.010) 56%,
+      transparent 62%
+    );
+    animation: luminary-sweep 11s ease-in-out 2s infinite;
+  }
+
+  /* About real photo */
+  .about-img-frame img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+
+  /* Gallery real photos */
+  .gallery-item {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .gallery-item .gallery-icon { display: none; }
+
+  /* Product image with real photo */
+  .product-image-inner.has-photo {
+    background-size: cover;
+    background-position: center;
+  }
+  .product-image-inner.has-photo .prod-icon-wrap { display: none; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav>
+  <a class="nav-logo" href="#hero">BIG<span>DIESEL</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">Empresa</a></li>
+    <li><a href="#services">Serviços</a></li>
+    <li><a href="#specialty">Especialidades</a></li>
+    <li><a href="#gallery">Galeria</a></li>
+    <li><a href="#contact" class="nav-cta">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-slash"></div>
+  <div class="hero-line"></div>
+  <div class="hero-luminary"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Centro de serviços Bosch</p>
+    <h1 class="hero-title">A Oficina<br>que Sua Frota<br><span>Merece.</span></h1>
+    <p class="hero-sub">Diagnóstico de precisão, tecnologia Bosch e profissionais qualificados. Especialistas em sistemas de injeção diesel Common Rail, bombas injetoras e transmissões.</p>
+    <div class="hero-actions">
+      <a href="https://wa.me/5511939016116" class="btn-primary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar no WhatsApp
+      </a>
+      <a href="#services" class="btn-outline">Ver Serviços</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num" data-count="25">0</span>
+      <span class="stat-label">Anos de Experiência</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-count="2200">0</span>
+      <span class="stat-label">Bar de pressão EPS 708</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-count="10">0</span>
+      <span class="stat-label">Serviços Especializados</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-suffix="%">100</span>
+      <span class="stat-label">Peças Originais</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ABOUT ══════════════════ -->
+<section id="about">
+  <div>
+    <p class="section-eyebrow reveal">Sobre a BigDiesel</p>
+    <h2 class="section-title reveal reveal-d1">Um Conceito <span>Diferente</span><br>de Oficina</h2>
+    <p class="section-desc reveal reveal-d2">
+      Na BigDiesel, o cliente encontra a confiança, a qualidade e a tecnologia que só a Bosch pode oferecer. Diagnósticos rápidos e precisos, realizados por profissionais qualificados com equipamentos de última geração.
+    </p>
+    <div class="diferenciais-grid reveal reveal-d3">
+      <div class="dif-card">
+        <div class="dif-icon">🔧</div>
+        <h4>Flexibilidade de Serviços</h4>
+        <p>Atendimento completo para caminhões, ônibus e veículos de carga pesada.</p>
+      </div>
+      <div class="dif-card">
+        <div class="dif-icon">⚡</div>
+        <h4>Eficiência Tecnológica</h4>
+        <p>Scanner, KTS e bancada EPS 708 para diagnóstico com precisão máxima.</p>
+      </div>
+      <div class="dif-card">
+        <div class="dif-icon">🛡️</div>
+        <h4>Peças Originais</h4>
+        <p>Garantia total em peças originais Bosch e outras marcas homologadas.</p>
+      </div>
+      <div class="dif-card">
+        <div class="dif-icon">📋</div>
+        <h4>Laudos e Certificados</h4>
+        <p>Laudos para recursos junto à CETESB e medição de opacidade homologada.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-visual reveal reveal-d2">
+    <div class="about-img-frame">
+      <img src="galeria-2.webp" alt="BigDiesel – Centro de Serviços Bosch, Vila Clarice São Paulo">
+    </div>
+    <div class="about-bg-text">DIESEL</div>
+  </div>
+</section>
+
+<!-- ══════════════════ SERVICES ══════════════════ -->
+<section id="services">
+  <p class="section-eyebrow reveal">O que oferecemos</p>
+  <h2 class="section-title reveal reveal-d1">Serviços <span>Especializados</span></h2>
+  <p class="section-desc reveal reveal-d2">Soluções completas para sistemas de injeção diesel, eletrônica veicular e certificações legais.</p>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-num">01</span>
+      <h3>Reparação de Bicos Injetores</h3>
+      <p>Desmontagem, limpeza ultrassônica, calibração e teste em bancada homologada Bosch.</p>
+    </div>
+    <div class="service-card reveal reveal-d1">
+      <span class="service-num">02</span>
+      <h3>Bombas Injetoras</h3>
+      <p>Revisão completa de bombas rotativas e lineares com peças originais e garantia de fábrica.</p>
+    </div>
+    <div class="service-card reveal reveal-d2">
+      <span class="service-num">03</span>
+      <h3>Injetores Eletrônicos</h3>
+      <p>Reparo de injetores piezoelétricos e eletromagnéticos para sistemas Common Rail.</p>
+    </div>
+    <div class="service-card reveal reveal-d3">
+      <span class="service-num">04</span>
+      <h3>Bombas de Alta Pressão</h3>
+      <p>Revisão de bombas CP1, CP3 e CP4 com teste em até 2.200 bar na bancada EPS 708.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-num">05</span>
+      <h3>Scanner & KTS</h3>
+      <p>Diagnóstico eletrônico completo com equipamento KTS Bosch e leitura de todos os módulos.</p>
+    </div>
+    <div class="service-card reveal reveal-d1">
+      <span class="service-num">06</span>
+      <h3>Laudos CETESB</h3>
+      <p>Emissão de laudos técnicos para recursos junto à CETESB em casos de autuação por fumaça.</p>
+    </div>
+    <div class="service-card reveal reveal-d2">
+      <span class="service-num">07</span>
+      <h3>Medição de Opacidade</h3>
+      <p>Medição certificada de opacidade de escapamento conforme normas ABNT e DENATRAN.</p>
+    </div>
+    <div class="service-card reveal reveal-d3">
+      <span class="service-num">08</span>
+      <h3>Pré-Inspeção Veicular</h3>
+      <p>Avaliação completa antes da inspeção oficial para garantir aprovação na primeira visita.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SPECIALTY / PRODUCTS ══════════════════ -->
+<section id="specialty">
+  <div class="specialty-intro">
+    <div>
+      <p class="section-eyebrow reveal">Nossa especialidade</p>
+      <h2 class="section-title reveal reveal-d1">Três Pilares da<br><span>Engenharia Diesel</span></h2>
+    </div>
+    <p class="section-desc reveal reveal-d2" style="margin-bottom:0">
+      Cada sistema recebe atenção exclusiva com equipamentos específicos, protocolos Bosch e profissionais com certificação técnica.
+    </p>
+  </div>
+
+  <!-- PRODUTO 1: EPS 708 / Bombas Common Rail -->
+  <div class="product-block reveal">
+    <div class="product-image prod-bg-eps">
+      <div class="product-image-inner has-photo" style="background-image: url('eps815_big.jpg');">
+      </div>
+    </div>
+    <div class="product-content">
+      <p class="product-tag">Bancada Bosch EPS 708</p>
+      <h3>Bombas<br>Common Rail</h3>
+      <p>A bancada EPS 708 da Bosch permite testes de bombas e injetores Common Rail com até 2.200 bar, com Rail desenvolvido para até 2.500 bar — preparada para os motores mais modernos do mercado.</p>
+      <ul class="product-features">
+        <li>Teste de injetores e bombas CP1 / CP3 / CP4</li>
+        <li>Pressões de até 2.200 bar</li>
+        <li>Software diagnóstico EPS 945</li>
+        <li>Rail 2.500 bar para futuras tecnologias</li>
+        <li>Monitor TFT 19" com leitura em tempo real</li>
+      </ul>
+      <a href="https://wa.me/5511939016116?text=Olá!%20Quero%20saber%20mais%20sobre%20bancada%20EPS%20708" class="btn-primary" target="_blank" style="align-self:flex-start">
+        Solicitar Diagnóstico
+      </a>
+    </div>
+  </div>
+
+  <!-- PRODUTO 2: Motores Diesel -->
+  <div class="product-block reveal">
+    <div class="product-content" style="order: 2;">
+      <p class="product-tag">Diagnóstico Avançado</p>
+      <h3>Motores<br>Diesel</h3>
+      <p>Análise completa do motor diesel com scanner KTS Bosch, leitura de todos os módulos eletrônicos, adaptações e programação de injetores — para caminhões e ônibus de todas as marcas.</p>
+      <ul class="product-features">
+        <li>Scanner KTS Bosch para todas as marcas</li>
+        <li>Leitura e reset de falhas eletrônicas</li>
+        <li>Codificação e programação de injetores</li>
+        <li>Análise de opacidade e emissões</li>
+        <li>Relatório técnico completo</li>
+      </ul>
+      <a href="https://wa.me/5511939016116?text=Olá!%20Quero%20diagnóstico%20de%20motor%20diesel" class="btn-primary" target="_blank" style="align-self:flex-start">
+        Agendar Análise
+      </a>
+    </div>
+    <div class="product-image prod-bg-motor" style="order: 3;">
+      <div class="product-image-inner has-photo" style="background-image: url('14-p85bs4arrbk93czu2bsmmgad6w3zwmc1rajbrdvo2o.jpg');">
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUTO 3: Caixa de Transmissão -->
+  <div class="product-block reveal">
+    <div class="product-image prod-bg-caixa">
+      <div class="product-image-inner has-photo" style="background-image: url('13-p85bp47bxdga07culj2j5pkcvkwsbfex0fihkkbxy8.jpg');">
+      </div>
+    </div>
+    <div class="product-content">
+      <p class="product-tag">Revisão Especializada</p>
+      <h3>Caixa de<br>Transmissão</h3>
+      <p>Reparo e revisão de caixas de transmissão para veículos pesados, com desmontagem completa, substituição de componentes desgastados e teste de bancada antes da entrega.</p>
+      <ul class="product-features">
+        <li>Transmissões manuais e automáticas</li>
+        <li>Desmontagem e inspeção completa</li>
+        <li>Peças originais com garantia</li>
+        <li>Teste de bancada pós-reparo</li>
+        <li>Laudos técnicos para frotas</li>
+      </ul>
+      <a href="https://wa.me/5511939016116?text=Olá!%20Quero%20orçamento%20para%20caixa%20de%20transmissão" class="btn-primary" target="_blank" style="align-self:flex-start">
+        Pedir Orçamento
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ GALLERY ══════════════════ -->
+<section id="gallery">
+  <p class="section-eyebrow reveal">Nossas instalações</p>
+  <h2 class="section-title reveal reveal-d1">Estrutura e <span>Equipamentos</span></h2>
+  <p class="section-desc reveal reveal-d2" style="margin-bottom:2.5rem">Ambiente profissional, limpo e organizado — porque cuidado com as instalações reflete o cuidado com o seu veículo.</p>
+  <div class="gallery-grid">
+    <div class="gallery-item reveal" style="background-image:url('galeria-3.webp')"></div>
+    <div class="gallery-item reveal reveal-d1" style="background-image:url('galeria.webp')"></div>
+    <div class="gallery-item reveal reveal-d2" style="background-image:url('galeria-4.webp')"></div>
+    <div class="gallery-item reveal reveal-d3" style="background-image:url('20.jpg')"></div>
+    <div class="gallery-item reveal reveal-d1" style="background-image:url('galeria-2.webp')"></div>
+    <div class="gallery-item reveal reveal-d2" style="background-image:url('21.jpg')"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ CONTACT ══════════════════ -->
+<section id="contact">
+  <div class="contact-info">
+    <p class="section-eyebrow reveal">Fale Conosco</p>
+    <h2 class="contact-info reveal reveal-d1"><span>Pronto</span> para<br>Atender Você</h2>
+    <p class="reveal reveal-d2">
+      Atendemos frotas, transportadoras e proprietários de veículos pesados na Zona Oeste de São Paulo. Entre em contato e agende seu diagnóstico.
+    </p>
+    <div class="contact-details reveal reveal-d3">
+      <div class="contact-row">
+        <div class="contact-row-icon">📞</div>
+        <div>
+          <strong>Telefone</strong>
+          (11) 3901-6116
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-icon">✉️</div>
+        <div>
+          <strong>E-mail</strong>
+          contato@bigdiesel.com.br
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-icon">📍</div>
+        <div>
+          <strong>Endereço</strong>
+          Av. Inácia de Toledo, 284 — Vila Clarice, São Paulo / SP
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-icon">🕐</div>
+        <div>
+          <strong>Horário</strong>
+          Segunda a sexta-feira, das 9h às 17h
+        </div>
+      </div>
+    </div>
+    <a href="https://wa.me/5511939016116?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20mais%20informações." class="whatsapp-cta reveal reveal-d4" target="_blank">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chamar no WhatsApp
+    </a>
+  </div>
+
+  <div class="contact-map reveal reveal-d2">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.711403889033!2d-46.7518502!3d-23.470872299999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cefc0169102d7d%3A0x840c73b3cbf9e725!2sBigdiesel%20-%20Bosch%20Diesel%20Service!5e0!3m2!1spt-BR!2sbr!4v1781037351637!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <span class="footer-logo">BIG<span>DIESEL</span></span>
+  <p>© 2024 BigDiesel Motores e Bombas Injetoras Ltda. · Todos os direitos reservados.</p>
+  <p style="font-size:.75rem;color:rgba(160,160,160,.35)">Centro de Serviços Bosch · São Paulo / SP</p>
+</footer>
+
+<!-- ══════════════════ SCRIPTS ══════════════════ -->
+<script>
+/* ─── PARTICLES ─── */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, pts = [];
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  function makeParticles() {
+    pts = [];
+    const n = Math.floor((W * H) / 12000);
+    for (let i = 0; i < n; i++) {
+      pts.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.2 + 0.3,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        a: Math.random() * 0.5 + 0.1,
+        red: Math.random() < 0.15
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    pts.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.red ? `rgba(200,0,0,${p.a})` : `rgba(180,180,180,${p.a * 0.4})`;
+      ctx.fill();
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); makeParticles(); });
+  resize(); makeParticles(); draw();
+})();
+
+/* ─── COUNTER ANIMATION ─── */
+function animateCounter(el) {
+  const target = parseInt(el.dataset.count || el.textContent);
+  const suffix = el.dataset.suffix || '';
+  const duration = 1600;
+  const start = performance.now();
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const val = Math.floor(eased * target);
+    el.textContent = val.toLocaleString('pt-BR') + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+/* ─── SCROLL REVEAL ─── */
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ─── COUNTER TRIGGER ─── */
+const statObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('[data-count]').forEach(animateCounter);
+      // also handle data-suffix without data-count
+      e.target.querySelectorAll('[data-suffix]').forEach(el => {
+        if (!el.dataset.count) animateCounter(el);
+      });
+      statObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+const statsEl = document.querySelector('.hero-stats');
+if (statsEl) statObs.observe(statsEl);
+
+/* ─── ACTIVE NAV ─── */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--white)' : '';
+  });
+}, { passive: true });
+</script>
+</body>
+</html>
